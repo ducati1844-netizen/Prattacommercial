@@ -364,8 +364,8 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "lime",
         "medical_certified": True,
-        "default_finish": "metalline_gold",
-        "available_finishes": ["metalline_gold", "metalline_silver", "metalline_bronze", "velatura", "umbrella"],
+        "default_finish": "velatura",
+        "available_finishes": ["velatura", "metalline_gold", "metalline_silver", "metalline_bronze", "umbrella"],
         "layers": [
             {
                 "category": "Preparation",
@@ -382,8 +382,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "metalline_gold", "multiplier": 1, "is_finish": True}],
-                "description": "Final wax or metallic veil deepens the surface and locks in the patina.",
+                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
+                "description": "Decorative veil seals the lime surface and deepens its tonal patina.",
             },
         ],
     },
@@ -394,8 +394,8 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "lime",
         "medical_certified": True,
-        "default_finish": "specchio_cera",
-        "available_finishes": ["specchio_cera", "metalline_gold", "metalline_silver"],
+        "default_finish": "velatura",
+        "available_finishes": ["velatura", "specchio_cera", "metalline_gold", "metalline_silver"],
         "layers": [
             {
                 "category": "Preparation",
@@ -412,8 +412,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "specchio_cera", "multiplier": 1, "is_finish": True}],
-                "description": "Mirror wax adds depth and a gentle satin reflection.",
+                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
+                "description": "Decorative veil seals the velvet surface and softens its tone.",
             },
         ],
     },
@@ -456,8 +456,8 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "lime",
         "medical_certified": True,
-        "default_finish": "specchio_cera",
-        "available_finishes": ["specchio_cera", "metalline_gold", "metalline_silver"],
+        "default_finish": "velatura",
+        "available_finishes": ["velatura", "specchio_cera", "metalline_gold", "metalline_silver"],
         "layers": [
             {
                 "category": "Preparation",
@@ -474,8 +474,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "specchio_cera", "multiplier": 1, "is_finish": True}],
-                "description": "Mirror wax for depth and protective sheen.",
+                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
+                "description": "Decorative veil seals the marble surface and softens its tonal depth.",
             },
         ],
     },
