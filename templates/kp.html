@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+:root {
+  --paper:       #F4ECD8;   /* warm sand */
+  --paper-soft:  #EFE6CF;   /* shaded sand */
+  --paper-deep:  #E5D8B5;   /* darker sand for accents */
+  --ochre:       #9C7A47;   /* signature ochre-gold */
+  --ochre-deep:  #6E5634;
+  --ochre-soft:  #C9A77A;
+  --ink:         #2B2419;   /* dark warm brown text */
+  --ink-soft:    #4F4434;
+  --muted:       #8C7B5D;
+  --line:        #C8B68E;
+  --line-soft:   #E1D3B0;
+
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --sans:  'Jost', 'Helvetica Neue', Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  page-break-after: always;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+.page:last-child { page-break-after: auto; }
+
+/* Декоративные уголки на каждой странице */
+.corner {
+  position: absolute;
+  width: 14mm;
+  height: 14mm;
+  border-color: var(--ochre);
+  border-style: solid;
+  border-width: 0;
+}
+.corner.tl { top: 6mm; left: 6mm;     border-top-width: 0.4mm; border-left-width: 0.4mm; }
+.corner.tr { top: 6mm; right: 6mm;    border-top-width: 0.4mm; border-right-width: 0.4mm; }
+.corner.bl { bottom: 6mm; left: 6mm;  border-bottom-width: 0.4mm; border-left-width: 0.4mm; }
+.corner.br { bottom: 6mm; right: 6mm; border-bottom-width: 0.4mm; border-right-width: 0.4mm; }
+
+/* ═══════════════════════════════════
+   PAGE 1 — COVER
+═══════════════════════════════════ */
+.page-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 22mm 24mm;
+}
+
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.brand-mark {
+  width: 22mm;
+  height: 22mm;
+  border-radius: 50%;
+  border: 0.5mm solid var(--ochre);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 8pt;
+  letter-spacing: 1.5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.cover-date {
+  font-family: var(--sans);
+  font-size: 8pt;
+  letter-spacing: 2.5px;
+  color: var(--ochre-deep);
+  text-transform: uppercase;
+  margin-top: 2mm;
+}
+
+.cover-center {
+  text-align: center;
+  padding: 0 4mm;
+}
+
+.cover-eyebrow {
+  font-family: var(--sans);
+  font-size: 8pt;
+  letter-spacing: 4px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  margin-bottom: 6mm;
+}
+
+.cover-divider {
+  width: 32mm;
+  height: 0.4mm;
+  background: var(--ochre);
+  margin: 6mm auto;
+}
+
+.cover-product-title {
+  font-family: var(--serif);
+  font-size: 44pt;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 1px;
+  line-height: 1.05;
+}
+
+.cover-product-subtitle {
+  font-family: var(--sans);
+  font-size: 9pt;
+  font-weight: 400;
+  letter-spacing: 5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  margin-top: 6mm;
+}
+
+.cover-meta {
+  display: flex;
+  justify-content: center;
+  gap: 12mm;
+  margin-top: 10mm;
+}
+
+.cover-meta-item { text-align: center; }
+
+.cover-meta-label {
+  font-size: 7pt;
+  letter-spacing: 2.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.cover-meta-value {
+  font-size: 14pt;
+  font-weight: 400;
+  color: var(--ink);
+  font-family: var(--serif);
+  margin-top: 1.5mm;
+}
+
+.cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 0.4mm solid var(--line);
+  padding-top: 6mm;
+}
+
+.cover-client-label,
+.cover-color-label {
+  font-size: 7pt;
+  letter-spacing: 2.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.cover-client-name {
+  font-family: var(--serif);
+  font-size: 16pt;
+  font-weight: 400;
+  color: var(--ink);
+  margin-top: 2mm;
+}
+
+.cover-color-block { text-align: right; }
+
+.cover-color-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3mm;
+  margin-top: 2mm;
+}
+
+.cover-color-swatch {
+  width: 11mm;
+  height: 11mm;
+  border-radius: 1mm;
+  border: 0.4mm solid var(--line);
+}
+
+.cover-color-name {
+  font-family: var(--serif);
+  font-size: 13pt;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.cover-footer {
+  margin-top: 5mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7pt;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* ═══════════════════════════════════
+   COMMON HEADERS / FOOTERS
+═══════════════════════════════════ */
+.page-header {
+  padding: 14mm 24mm 4mm;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.3mm solid var(--line);
+}
+
+.page-header-brand {
+  font-size: 7.5pt;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--ochre);
+  text-transform: uppercase;
+}
+
+.page-header-product {
+  font-size: 7pt;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.page-footer {
+  position: absolute;
+  bottom: 8mm;
+  left: 24mm;
+  right: 24mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 7pt;
+  color: var(--muted);
+  letter-spacing: 1px;
+  border-top: 0.3mm solid var(--line);
+  padding-top: 3mm;
+}
+
+/* ═══════════════════════════════════
+   PAGE 2 — CONCEPT
+═══════════════════════════════════ */
+.concept-body { padding: 12mm 24mm; }
+
+.concept-eyebrow {
+  font-size: 7.5pt;
+  letter-spacing: 3.5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6mm;
+}
+
+.concept-title {
+  font-family: var(--serif);
+  font-size: 32pt;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 8mm;
+}
+
+.concept-text {
+  font-size: 10.5pt;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  max-width: 150mm;
+}
+
+.concept-divider {
+  width: 22mm;
+  height: 0.4mm;
+  background: var(--ochre);
+  margin: 10mm 0;
+}
+
+.concept-palette {
+  display: flex;
+  gap: 6mm;
+  margin-top: 2mm;
+}
+
+.concept-swatch-item { text-align: center; }
+
+.concept-swatch {
+  width: 26mm;
+  height: 26mm;
+  border-radius: 2mm;
+  border: 0.4mm solid var(--line);
+}
+
+.concept-swatch-name {
+  font-family: var(--serif);
+  font-size: 9pt;
+  color: var(--ink);
+  margin-top: 2mm;
+  font-style: italic;
+}
+
+.concept-quote {
+  margin-top: 14mm;
+  padding: 7mm 9mm;
+  background: var(--paper-soft);
+  border-left: 0.6mm solid var(--ochre);
+}
+
+.concept-quote-text {
+  font-family: var(--serif);
+  font-size: 13pt;
+  font-weight: 400;
+  color: var(--ink);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════
+   PAGE 3 — SYSTEM
+═══════════════════════════════════ */
+.system-body { padding: 12mm 24mm; }
+
+.system-headline {
+  font-family: var(--serif);
+  font-size: 26pt;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2mm;
+}
+
+.system-subline {
+  font-size: 8pt;
+  letter-spacing: 2.5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  margin-bottom: 12mm;
+}
+
+.system-layer {
+  display: flex;
+  align-items: flex-start;
+  border-top: 0.3mm solid var(--line);
+  padding: 7mm 0;
+}
+
+.system-layer:last-of-type {
+  border-bottom: 0.3mm solid var(--line);
+}
+
+.system-layer-num {
+  font-family: var(--serif);
+  font-size: 32pt;
+  font-weight: 300;
+  color: var(--ochre);
+  line-height: 1;
+  width: 20mm;
+  flex-shrink: 0;
+}
+
+.system-layer-category {
+  font-size: 7.5pt;
+  letter-spacing: 3px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 2mm;
+}
+
+.system-layer-product {
+  font-family: var(--serif);
+  font-size: 16pt;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2mm;
+}
+
+.system-layer-desc {
+  font-size: 9pt;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.system-benefits {
+  display: flex;
+  gap: 6mm;
+  margin-top: 12mm;
+  padding-top: 8mm;
+  border-top: 0.3mm solid var(--line);
+}
+
+.system-benefit {
+  flex: 1;
+  padding: 5mm 6mm;
+  background: var(--paper-soft);
+  border-left: 0.5mm solid var(--ochre);
+}
+
+.system-benefit-mark {
+  font-family: var(--serif);
+  font-size: 16pt;
+  color: var(--ochre);
+  line-height: 1;
+  margin-bottom: 2mm;
+  display: block;
+}
+
+.system-benefit-title {
+  font-size: 8.5pt;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5mm;
+}
+
+.system-benefit-text {
+  font-size: 7.5pt;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ═══════════════════════════════════
+   PAGE — PHOTOS (optional)
+═══════════════════════════════════ */
+.photos-body { padding: 12mm 24mm; }
+
+.photos-headline {
+  font-family: var(--serif);
+  font-size: 24pt;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 2mm;
+}
+
+.photos-subline {
+  font-size: 8pt;
+  letter-spacing: 2.5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  margin-bottom: 10mm;
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5mm;
+}
+
+.photo-cell {
+  width: 100%;
+  height: 80mm;
+  background: var(--paper-soft) center/cover no-repeat;
+  border: 0.4mm solid var(--line);
+  border-radius: 1.5mm;
+}
+
+.photo-cell.full { grid-column: 1 / -1; height: 165mm; }
+
+/* ═══════════════════════════════════
+   PAGE — SPECIFICATION
+═══════════════════════════════════ */
+.spec-body { padding: 10mm 24mm 16mm; }
+
+.spec-headline {
+  font-family: var(--serif);
+  font-size: 24pt;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 6mm;
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+
+.spec-table th {
+  text-align: left;
+  padding: 2.5mm 2.5mm;
+  font-size: 7pt;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  border-bottom: 0.3mm solid var(--line);
+}
+
+.spec-table th:not(:first-child) { text-align: right; }
+
+.spec-group-header td {
+  background: var(--paper-deep);
+  color: var(--ochre-deep);
+  font-size: 7.5pt;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 2.5mm 2.5mm;
+  border-top: 0.3mm solid var(--ochre-soft);
+  border-bottom: 0.3mm solid var(--ochre-soft);
+}
+
+.spec-row td {
+  padding: 2.5mm 2.5mm;
+  border-bottom: 0.2mm solid var(--line-soft);
+  vertical-align: middle;
+}
+
+.spec-row:nth-child(even) td { background: var(--paper-soft); }
+
+.spec-col-name  { color: var(--ink); font-weight: 400; }
+.spec-col-pkg   { color: var(--muted); font-size: 8pt; }
+.spec-col-num   { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.spec-col-price { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.spec-col-total { text-align: right; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.spec-totals {
+  margin-top: 6mm;
+  background: var(--paper-deep);
+  padding: 6mm 7mm;
+  border-left: 0.6mm solid var(--ochre);
+}
+
+.spec-totals-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5mm 0;
+}
+
+.spec-totals-label {
+  font-size: 8.5pt;
+  color: var(--ink-soft);
+  letter-spacing: 0.5px;
+}
+
+.spec-totals-value {
+  font-family: var(--serif);
+  font-size: 14pt;
+  color: var(--ink);
+}
+
+.spec-totals-divider {
+  height: 0.3mm;
+  background: var(--ochre-soft);
+  margin: 3mm 0;
+}
+
+.spec-totals-main-label {
+  font-size: 9pt;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  color: var(--ochre-deep);
+  text-transform: uppercase;
+}
+
+.spec-totals-main-value {
+  font-family: var(--serif);
+  font-size: 24pt;
+  font-weight: 500;
+  color: var(--ochre-deep);
+}
+
+.spec-note {
+  margin-top: 4mm;
+  font-size: 7.5pt;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+/* ═══════════════════════════════════
+   PAGE — CONDITIONS
+═══════════════════════════════════ */
+.conditions-body {
+  padding: 12mm 24mm;
+  display: flex;
+  gap: 10mm;
+}
+
+.conditions-left  { flex: 1.1; }
+.conditions-right { flex: 0.9; }
+
+.conditions-section-title {
+  font-size: 7.5pt;
+  letter-spacing: 3.5px;
+  color: var(--ochre);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6mm;
+  padding-bottom: 2.5mm;
+  border-bottom: 0.3mm solid var(--ochre);
+}
+
+.conditions-step {
+  display: flex;
+  gap: 5mm;
+  margin-bottom: 5mm;
+}
+
+.conditions-step-num {
+  font-family: var(--serif);
+  font-size: 18pt;
+  font-weight: 300;
+  color: var(--ochre);
+  line-height: 1;
+  width: 9mm;
+  flex-shrink: 0;
+}
+
+.conditions-step-title {
+  font-size: 9pt;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 1mm;
+}
+
+.conditions-step-desc {
+  font-size: 8pt;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.conditions-payment {
+  background: var(--paper-soft);
+  padding: 6mm;
+  border-left: 0.5mm solid var(--ochre);
+}
+
+.conditions-payment-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 2mm 0;
+  border-bottom: 0.2mm solid var(--line-soft);
+}
+
+.conditions-payment-item:last-child { border-bottom: none; }
+
+.conditions-payment-label {
+  font-size: 8.5pt;
+  color: var(--muted);
+}
+
+.conditions-payment-value {
+  font-size: 8.5pt;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.conditions-about {
+  background: var(--paper-soft);
+  padding: 6mm;
+  margin-top: 6mm;
+}
+
+.conditions-about-text {
+  font-size: 8.5pt;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+
+.conditions-validity {
+  margin-top: 6mm;
+  padding: 5mm 6mm;
+  background: var(--ochre);
+  color: var(--paper);
+}
+
+.conditions-validity-text {
+  font-family: var(--serif);
+  font-size: 11pt;
+  font-style: italic;
+}
+
+.conditions-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5mm 24mm;
+  background: var(--ochre);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--paper);
+}
+
+.conditions-footer-brand {
+  font-size: 9pt;
+  font-weight: 600;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+}
+
+.conditions-footer-contact-line {
+  font-size: 7.5pt;
+  letter-spacing: 0.5px;
+  text-align: right;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     PAGE 1 — COVER
+═══════════════════════════════════ -->
+<section class="page page-cover">
+  <span class="corner tl"></span>
+  <span class="corner tr"></span>
+  <span class="corner bl"></span>
+  <span class="corner br"></span>
+
+  <div class="cover-top">
+    <div>
+      <div class="brand-mark">Pratta<br>Exclusive</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="cover-date">{{ date }}</div>
+      <div class="cover-date" style="margin-top:1mm">Commercial Proposal</div>
+    </div>
+  </div>
+
+  <div class="cover-center">
+    <div class="cover-eyebrow">Pratta Thailand · Premium Decorative Coatings</div>
+    <div class="cover-divider"></div>
+    <div class="cover-product-title">{{ product_title }}</div>
+    <div class="cover-product-subtitle">{{ product_subtitle }}</div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Area</div>
+        <div class="cover-meta-value">{{ area }} m²</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Zone</div>
+        <div class="cover-meta-value">{{ zone }}</div>
+      </div>
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Total</div>
+        <div class="cover-meta-value">{{ total | thb }} THB</div>
+      </div>
+    </div>
+    <div class="cover-divider"></div>
+  </div>
+
+  <div>
+    <div class="cover-bottom">
+      <div>
+        <div class="cover-client-label">Prepared for</div>
+        <div class="cover-client-name">{{ client_name if client_name else "Your Project" }}</div>
+      </div>
+      <div class="cover-color-block">
+        <div class="cover-color-label">Selected Tone</div>
+        <div class="cover-color-row">
+          <div class="cover-color-swatch" style="background: {{ color_hex }};"></div>
+          <div class="cover-color-name">{{ color_name }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-footer">
+      <span>Prepared exclusively for your project</span>
+      <span>prattathailand.com · info@prattathailand.com</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     PAGE 2 — CONCEPT
+═══════════════════════════════════ -->
+<section class="page">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="page-header">
+    <div class="page-header-brand">Pratta Thailand</div>
+    <div class="page-header-product">{{ product_title }} · Concept</div>
+  </div>
+
+  <div class="concept-body">
+    <div class="concept-eyebrow">The Collection</div>
+    <div class="concept-title">{{ product_title }}</div>
+    <div class="concept-text">{{ product_description }}</div>
+
+    <div class="concept-divider"></div>
+
+    <div class="concept-eyebrow">Selected Palette</div>
+    <div class="concept-palette">
+      <div class="concept-swatch-item">
+        <div class="concept-swatch" style="background: {{ color_hex }};"></div>
+        <div class="concept-swatch-name">{{ color_name }}</div>
+      </div>
+    </div>
+
+    <div class="concept-quote">
+      <div class="concept-quote-text">"{{ design_intent }}"</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Pratta Thailand · prattathailand.com</span>
+    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     PAGE 3 — SYSTEM
+═══════════════════════════════════ -->
+<section class="page">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="page-header">
+    <div class="page-header-brand">Pratta Thailand</div>
+    <div class="page-header-product">{{ product_title }} · Application System</div>
+  </div>
+
+  <div class="system-body">
+    <div class="system-headline">Multi-Layer Application System</div>
+    <div class="system-subline">Professional protective architecture for lasting performance</div>
+
+    {% for layer in layers %}
+    <div class="system-layer">
+      <div class="system-layer-num">0{{ layer.layer_num }}</div>
+      <div>
+        <div class="system-layer-category">{{ layer.category }}</div>
+        <div class="system-layer-product">{{ layer.main_product }}</div>
+        <div class="system-layer-desc">{{ layer.description }}</div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="system-benefits">
+      {% for benefit in benefits %}
+      <div class="system-benefit">
+        <span class="system-benefit-mark">◆</span>
+        <div class="system-benefit-title">{{ benefit }}</div>
+        <div class="system-benefit-text">{% if loop.index == 1 %}Built for Thailand's tropical climate and humidity.{% elif loop.index == 2 %}Safe for residential and high-standard environments.{% else %}Long-term performance with minimal maintenance.{% endif %}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Pratta Thailand · prattathailand.com</span>
+    <span>{{ product_title }} · {{ area }} m²</span>
+  </div>
+</section>
+
+
+{% if photo_uris and photo_uris|length > 0 %}
+<!-- ═══════════════════════════════════
+     PAGE — PROJECT PHOTOS
+═══════════════════════════════════ -->
+<section class="page">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="page-header">
+    <div class="page-header-brand">Pratta Thailand</div>
+    <div class="page-header-product">{{ product_title }} · Project Reference</div>
+  </div>
+
+  <div class="photos-body">
+    <div class="photos-headline">Project Reference</div>
+    <div class="photos-subline">Inspiration, site photos and material samples</div>
+
+    <div class="photos-grid">
+      {% if photo_uris|length == 1 %}
+        <div class="photo-cell full" style="background-image: url('{{ photo_uris[0] }}');"></div>
+      {% else %}
+        {% for uri in photo_uris[:6] %}
+        <div class="photo-cell" style="background-image: url('{{ uri }}');"></div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Pratta Thailand · prattathailand.com</span>
+    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+  </div>
+</section>
+{% endif %}
+
+
+<!-- ═══════════════════════════════════
+     PAGE — SPECIFICATION & INVESTMENT
+═══════════════════════════════════ -->
+<section class="page">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="page-header">
+    <div class="page-header-brand">Pratta Thailand</div>
+    <div class="page-header-product">{{ product_title }} · Specification &amp; Investment</div>
+  </div>
+
+  <div class="spec-body">
+    <div class="spec-headline">Specification &amp; Investment</div>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th style="width:42%">Product</th>
+          <th style="width:12%">Pack</th>
+          <th style="width:8%">Qty</th>
+          <th style="width:18%">Unit price</th>
+          <th style="width:20%">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for group in materials %}
+        <tr class="spec-group-header"><td colspan="5">{{ group.group }}</td></tr>
+        {% for item in group['items'] %}
+        <tr class="spec-row">
+          <td class="spec-col-name">{{ item.name }}</td>
+          <td class="spec-col-pkg" style="text-align:right">{{ item.package }}</td>
+          <td class="spec-col-num">{{ item.quantity }}</td>
+          <td class="spec-col-price">{{ item.unit_price | thb }} THB</td>
+          <td class="spec-col-total">{{ item.total | thb }} THB</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+
+        {% if application_included %}
+        <tr class="spec-group-header"><td colspan="5">Works — Professional Application</td></tr>
+        <tr class="spec-row">
+          <td class="spec-col-name">Application works</td>
+          <td class="spec-col-pkg" style="text-align:right">m²</td>
+          <td class="spec-col-num">{{ area }}</td>
+          <td class="spec-col-price">{{ application_rate | thb }} THB/m²</td>
+          <td class="spec-col-total">{{ works_total | thb }} THB</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <div class="spec-totals">
+      <div class="spec-totals-row">
+        <div class="spec-totals-label">Materials total</div>
+        <div class="spec-totals-value">{{ materials_total | thb }} THB</div>
+      </div>
+      {% if application_included and works_total %}
+      <div class="spec-totals-row">
+        <div class="spec-totals-label">Application works</div>
+        <div class="spec-totals-value">{{ works_total | thb }} THB</div>
+      </div>
+      {% endif %}
+      <div class="spec-totals-divider"></div>
+      <div class="spec-totals-row" style="align-items:center">
+        <div class="spec-totals-main-label">Total investment</div>
+        <div class="spec-totals-main-value">{{ total | thb }} THB</div>
+      </div>
+      <div class="spec-totals-row">
+        <div class="spec-totals-label" style="font-size:7.5pt">All-inclusive price per m²</div>
+        <div class="spec-totals-value" style="font-size:11pt">{{ price_per_sqm | thb }} THB/m²</div>
+      </div>
+    </div>
+
+    <div class="spec-note">
+      * VAT not included. Surface preparation (levelling, filling) is quoted separately upon site inspection.<br>
+      * Working area calculated with 10% material allowance. Prices based on SL retail price list, valid 14 days.
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Pratta Thailand · prattathailand.com</span>
+    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     PAGE — CONDITIONS
+═══════════════════════════════════ -->
+<section class="page">
+  <span class="corner tl"></span><span class="corner tr"></span>
+  <span class="corner bl"></span><span class="corner br"></span>
+
+  <div class="page-header">
+    <div class="page-header-brand">Pratta Thailand</div>
+    <div class="page-header-product">{{ product_title }} · Terms of Work</div>
+  </div>
+
+  <div class="conditions-body">
+    <div class="conditions-left">
+      <div class="conditions-section-title">Process</div>
+
+      <div class="conditions-step">
+        <div class="conditions-step-num">01</div>
+        <div>
+          <div class="conditions-step-title">Site Inspection</div>
+          <div class="conditions-step-desc">Our specialist visits the site to assess surface condition, accessibility and project scope.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">02</div>
+        <div>
+          <div class="conditions-step-title">Test Wall Sample</div>
+          <div class="conditions-step-desc">We apply a sample on-site for colour and texture approval. Work proceeds only after signed confirmation.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">03</div>
+        <div>
+          <div class="conditions-step-title">Advance Payment</div>
+          <div class="conditions-step-desc">Materials: 100% advance. Works payment schedule agreed per project scope.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">04</div>
+        <div>
+          <div class="conditions-step-title">Commencement</div>
+          <div class="conditions-step-desc">Works begin minimum 7 calendar days after advance payment. Site must be ready: water, power, no parallel trades.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">05</div>
+        <div>
+          <div class="conditions-step-title">Handover &amp; Acceptance</div>
+          <div class="conditions-step-desc">Final inspection and acceptance certificate signed by both parties. Defects addressed within 5 working days.</div>
+        </div>
+      </div>
+
+      <div class="conditions-validity">
+        <div class="conditions-validity-text">This proposal is valid for 14 days from the date of issue.</div>
+      </div>
+    </div>
+
+    <div class="conditions-right">
+      <div class="conditions-section-title">Payment</div>
+
+      <div class="conditions-payment">
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Materials</div><div class="conditions-payment-value">100% advance</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Works</div><div class="conditions-payment-value">By agreement</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">VAT</div><div class="conditions-payment-value">Not included</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Surface prep</div><div class="conditions-payment-value">Quoted separately</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Quote validity</div><div class="conditions-payment-value">14 days</div></div>
+      </div>
+
+      <div style="margin-top: 8mm;">
+        <div class="conditions-section-title">About Pratta</div>
+        <div class="conditions-about">
+          <div class="conditions-about-text">
+            Pratta is an Italian-origin decorative coating brand present in 15+ countries — Russia, Thailand, Saudi Arabia, USA, Italy, Germany. All materials are produced with European-grade raw ingredients — authentic Italian lime — meeting the highest international quality standards.<br><br>
+            Pratta Thailand is the official brand representative in Southeast Asia, offering supply, professional application, and certified master training through the Pratta Academy.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conditions-footer">
+    <div class="conditions-footer-brand">Pratta Thailand</div>
+    <div>
+      <div class="conditions-footer-contact-line">prattathailand.com</div>
+      <div class="conditions-footer-contact-line">info@prattathailand.com</div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
