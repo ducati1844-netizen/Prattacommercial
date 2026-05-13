@@ -517,8 +517,8 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "acrylic",
         "medical_certified": True,
-        "default_finish": "metalline_silver",
-        "available_finishes": ["metalline_silver", "metalline_gold", "metalline_bronze", "velatura"],
+        "default_finish": "umbrella_silk",
+        "available_finishes": ["umbrella_silk", "metalline_silver", "metalline_gold", "metalline_bronze", "velatura"],
         "layers": [
             {
                 "category": "Preparation",
@@ -535,8 +535,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "metalline_silver", "multiplier": 1, "is_finish": True}],
-                "description": "Metallic finish — silver, gold or bronze tones.",
+                "products": [{"id": "umbrella_silk", "multiplier": 1, "is_finish": True}],
+                "description": "Protective silk veil — locks in the surface and adds a soft satin sheen.",
             },
         ],
     },
