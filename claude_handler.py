@@ -43,12 +43,19 @@ PARSE_PROMPT = f"""You extract a structured intent from a Pratta Thailand employ
 ALLOWED `system` values (use the exact id):
 {_SYSTEM_LIST_TEXT}
 
-Notes on mapping common names:
-- "travertino" / "travertin" → travertino_imperium
-- "venetian" / "venetsian" / "венецианка" → antico_veneziano
-- "marmorino" → marmorino_carrara (unless explicitly Antico Veneziano)
+Notes on mapping common names (be tolerant to typos / speech-to-text distortions):
+- "travertino" / "travertin" / "травертин" / "имерум" / "imperium" → travertino_imperium
+- "venetian" / "venetsian" / "венецианка" / "антико" → antico_veneziano
+- "marmorino" / "мармарин" / "carrara" / "кеара" → marmorino_carrara (unless explicitly Antico Veneziano)
 - "silk line" — pick the specific product the user named (seta_exclusive, antico_velluto, etc.)
-- "plastogum" → plastogum, "theia" → theia, "int est" → int_est
+- PAINTS — be especially tolerant to STT distortions:
+    "plastogum" / "пластогум" / "пластагум" / "ластагам" / "lastagam" / "plastagum" / "пластик" / "эластомер"
+    → plastogum
+    A bare "краска" / "paint" with no other product name → plastogum (our hero paint)
+    "theia" / "тея" / "тэя" / "egshell" → theia
+    "int est" / "int&est" / "интест" → int_est
+- If the request mentions BOTH a plaster system AND a paint ("manu + плюс плагостум на потолок") — pick the PRIMARY product (the one with more m² or mentioned first). The bot handles one system per KP.
+- If the input is clearly a paint name even slightly distorted — map to the closest paint system. Do NOT return null.
 
 OUTPUT JSON SCHEMA — every field required (use null where unknown):
 

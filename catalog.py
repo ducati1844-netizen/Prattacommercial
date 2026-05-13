@@ -995,11 +995,26 @@ SYSTEM_ALIASES = {
     "фантазия": "fantasia",
     "plastogum": "plastogum",
     "пластогум": "plastogum",
+    "пластагум": "plastogum",
+    "пластогам": "plastogum",
+    "пластагам": "plastogum",
+    "ластагам": "plastogum",
+    "lastagam": "plastogum",
+    "lastogam": "plastogum",
+    "plastogam": "plastogum",
+    "plastagam": "plastogum",
+    "plastagum": "plastogum",
+    "krask": "plastogum",        # «краска» по умолчанию = Plastogum (наш hero)
+    "краска": "plastogum",
+    "paint": "plastogum",
     "int est": "int_est",
     "int&est": "int_est",
     "int_est": "int_est",
+    "интест": "int_est",
+    "интэст": "int_est",
     "theia": "theia",
     "тея": "theia",
+    "тэя": "theia",
 }
 
 
