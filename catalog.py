@@ -645,9 +645,9 @@ SYSTEMS = {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "ruvido_pt", "multiplier": 2, "by_tone": "ruvido"},  # 2 layers
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},  # single layer is enough
                 ],
-                "description": "Mineral primer and Ruvido textured base — two layers for adhesion and depth.",
+                "description": "Mineral primer and Ruvido textured base — single coat for adhesion and depth.",
             },
             {
                 "category": "Decorative Base",
