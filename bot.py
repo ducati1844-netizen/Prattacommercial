@@ -1,9 +1,15 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import json
+import logging
 import os
 import tempfile
+import time
+from datetime import datetime
 
+import requests
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -27,8 +33,113 @@ from pdf_generator import generate_kp_pdf
 
 load_dotenv()
 
-WAITING, CONFIRMING, REFINING = range(3)
+logger = logging.getLogger(__name__)
+
+WAITING, CONFIRMING, REFINING, AWAITING_DEAL_ID = range(4)
 MAX_PHOTOS = 6
+
+BITRIX_WEBHOOK_URL = os.getenv(
+    "BITRIX_WEBHOOK_URL",
+    "https://pratta.bitrix24.ru/rest/1/13bvcl4q30kjmrop",
+).rstrip("/")
+KP_ATTACH_QUEUE_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "kp_attach_queue.json"
+)
+
+
+# ─────────────────────────────────────────────────────────────
+# BITRIX ATTACH
+# ─────────────────────────────────────────────────────────────
+
+def _build_comment(kp_data: dict) -> str:
+    product = kp_data.get("product_title", "?")
+    area = kp_data.get("area", "?")
+    total = kp_data.get("total", "?")
+    try:
+        total_fmt = f"{int(total):,}".replace(",", " ")
+    except (TypeError, ValueError):
+        total_fmt = str(total)
+    client = kp_data.get("client_name") or kp_data.get("intent", {}).get("client_name") if isinstance(kp_data.get("intent"), dict) else kp_data.get("client_name")
+    lines = [
+        "📎 КП отправлен клиенту через @Commercialprattabot",
+        f"Продукт: {product}",
+        f"Площадь: {area} м²",
+        f"Сумма: {total_fmt} THB",
+    ]
+    if client:
+        lines.append(f"Клиент: {client}")
+    return "\n".join(lines)
+
+
+def _enqueue_failed_attach(deal_id: int, pdf_path: str, kp_data: dict, error: str) -> None:
+    """Persist failed attach for later manual/automated retry."""
+    entry = {
+        "ts": datetime.utcnow().isoformat() + "Z",
+        "deal_id": deal_id,
+        "pdf_path": pdf_path,
+        "product_title": kp_data.get("product_title"),
+        "area": kp_data.get("area"),
+        "total": kp_data.get("total"),
+        "client_name": kp_data.get("client_name"),
+        "error": error,
+    }
+    try:
+        queue = []
+        if os.path.exists(KP_ATTACH_QUEUE_PATH):
+            with open(KP_ATTACH_QUEUE_PATH, "r", encoding="utf-8") as f:
+                queue = json.load(f)
+        queue.append(entry)
+        with open(KP_ATTACH_QUEUE_PATH, "w", encoding="utf-8") as f:
+            json.dump(queue, f, ensure_ascii=False, indent=2)
+        logger.warning("Enqueued failed Bitrix attach for deal %s -> %s", deal_id, KP_ATTACH_QUEUE_PATH)
+    except Exception as e:
+        logger.error("Failed to write retry queue: %s", e)
+
+
+def attach_to_bitrix_deal(deal_id: int, pdf_path: str, kp_data: dict) -> bool:
+    """
+    Attach PDF to a Bitrix deal timeline via crm.timeline.comment.add (FILES[] base64).
+    Retries 3 times with exponential backoff (1s, 2s, 4s). On final failure, enqueues
+    to local retry queue and returns False.
+    """
+    if not deal_id:
+        return False
+    if not os.path.exists(pdf_path):
+        logger.error("Bitrix attach: PDF not found: %s", pdf_path)
+        return False
+
+    with open(pdf_path, "rb") as f:
+        pdf_b64 = base64.b64encode(f.read()).decode("ascii")
+    filename = os.path.basename(pdf_path)
+
+    payload = {
+        "fields": {
+            "ENTITY_ID": int(deal_id),
+            "ENTITY_TYPE": "deal",
+            "COMMENT": _build_comment(kp_data),
+            "FILES": [[filename, pdf_b64]],
+        }
+    }
+    url = f"{BITRIX_WEBHOOK_URL}/crm.timeline.comment.add.json"
+
+    last_err = None
+    for attempt in range(3):
+        try:
+            r = requests.post(url, json=payload, timeout=60)
+            data = r.json() if r.content else {}
+            if r.ok and data.get("result"):
+                logger.info("Bitrix attach OK deal=%s comment_id=%s", deal_id, data.get("result"))
+                return True
+            last_err = f"HTTP {r.status_code} body={str(data)[:300]}"
+            logger.warning("Bitrix attach attempt %s failed: %s", attempt + 1, last_err)
+        except Exception as e:
+            last_err = repr(e)
+            logger.warning("Bitrix attach attempt %s raised: %s", attempt + 1, last_err)
+        if attempt < 2:
+            time.sleep(2 ** attempt)  # 1s, 2s
+
+    _enqueue_failed_attach(deal_id, pdf_path, kp_data, last_err or "unknown")
+    return False
 
 WELCOME = (
     "👋 *Pratta — генератор КП*\n\n"
@@ -93,6 +204,7 @@ def _ensure_state(context: ContextTypes.DEFAULT_TYPE):
     context.user_data.setdefault("intent", None)
     context.user_data.setdefault("kp_data", None)
     context.user_data.setdefault("history", [])  # для контекста правок
+    context.user_data.setdefault("bitrix_deal_id", None)
 
 
 def _cleanup_photos(context: ContextTypes.DEFAULT_TYPE):
@@ -240,6 +352,15 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     if query.data == "generate":
+        # Если deal_id ещё не задан в этой сессии — спрашиваем перед генерацией
+        if context.user_data.get("bitrix_deal_id") is None:
+            await query.edit_message_text(
+                "🆔 *Bitrix Deal ID?*\n\n"
+                "Скопируйте номер сделки из URL Bitrix (например, 1359) и пришлите числом.\n"
+                "Введите `-1` или `skip`, если не хотите прикреплять КП к сделке.",
+                parse_mode="Markdown",
+            )
+            return AWAITING_DEAL_ID
         await _generate_pdf(update, context)
         return WAITING
 
@@ -284,11 +405,17 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def _generate_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    await query.edit_message_text("⏳ Генерирую PDF...")
+    chat_id = (query.message.chat_id if query else update.effective_chat.id)
+    if query:
+        await query.edit_message_text("⏳ Генерирую PDF...")
+    else:
+        await context.bot.send_message(chat_id=chat_id, text="⏳ Генерирую PDF...")
 
     kp_data = context.user_data.get("kp_data") or {}
     kp_data = {**kp_data, "photos": context.user_data.get("photos", [])}
+    deal_id = context.user_data.get("bitrix_deal_id")
 
+    pdf_path = None
     try:
         pdf_path = generate_kp_pdf(kp_data)
         client = kp_data.get("client_name") or "Project"
@@ -297,25 +424,78 @@ async def _generate_pdf(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         with open(pdf_path, "rb") as f:
             await context.bot.send_document(
-                chat_id=query.message.chat_id,
+                chat_id=chat_id,
                 document=f,
                 filename=filename,
                 caption="✅ КП готово. Отправьте клиенту.",
             )
+
+        # Attach to Bitrix deal timeline (best-effort, Telegram already delivered).
+        if deal_id and deal_id != -1:
+            try:
+                ok = await asyncio.to_thread(
+                    attach_to_bitrix_deal, deal_id, pdf_path, kp_data
+                )
+                if ok:
+                    await context.bot.send_message(
+                        chat_id=chat_id,
+                        text=f"📎 PDF прикреплён к сделке Bitrix #{deal_id}.",
+                    )
+                else:
+                    await context.bot.send_message(
+                        chat_id=chat_id,
+                        text=(
+                            f"⚠️ Не удалось прикрепить PDF к сделке #{deal_id} "
+                            "после 3 попыток. Запись добавлена в очередь retry."
+                        ),
+                    )
+            except Exception as e:
+                logger.error("attach_to_bitrix_deal raised: %s", e)
+                await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=f"⚠️ Bitrix attach error: {e}",
+                )
+
         try:
             os.unlink(pdf_path)
         except OSError:
             pass
 
         await context.bot.send_message(
-            chat_id=query.message.chat_id,
+            chat_id=chat_id,
             text="Создать ещё одно КП? Опишите следующий проект или /reset.",
         )
     except Exception as e:
         await context.bot.send_message(
-            chat_id=query.message.chat_id,
+            chat_id=chat_id,
             text=f"❌ Ошибка генерации PDF: {e}",
         )
+
+
+async def handle_deal_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Принимает Bitrix Deal ID, затем запускает генерацию PDF."""
+    _ensure_state(context)
+    text = (update.message.text or "").strip()
+    if text.lower() in ("-1", "skip", "пропустить", "нет", "no"):
+        context.user_data["bitrix_deal_id"] = -1
+        await update.message.reply_text("⏭ Пропускаю Bitrix. Генерирую PDF только в Telegram...")
+    else:
+        try:
+            deal_id = int(text)
+            if deal_id <= 0:
+                raise ValueError
+            context.user_data["bitrix_deal_id"] = deal_id
+            await update.message.reply_text(f"✅ Deal #{deal_id} зафиксирован. Генерирую PDF...")
+        except ValueError:
+            await update.message.reply_text(
+                "Не похоже на число. Пришлите целый Deal ID (например, 1359) "
+                "или `-1` чтобы пропустить.",
+                parse_mode="Markdown",
+            )
+            return AWAITING_DEAL_ID
+
+    await _generate_pdf(update, context)
+    return WAITING
 
 
 async def handle_refinement(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -373,6 +553,9 @@ def main():
                 MessageHandler(filters.TEXT & ~filters.COMMAND, handle_refinement),
                 MessageHandler(filters.VOICE, handle_voice),
                 MessageHandler(filters.PHOTO, handle_photo),
+            ],
+            AWAITING_DEAL_ID: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, handle_deal_id),
             ],
         },
         fallbacks=[
