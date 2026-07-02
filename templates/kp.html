@@ -753,6 +753,12 @@ body {
     <div class="cover-product-subtitle">{{ product_subtitle }}</div>
 
     <div class="cover-meta">
+      {% if is_custom %}
+      <div class="cover-meta-item">
+        <div class="cover-meta-label">Items</div>
+        <div class="cover-meta-value">{{ items_count }}</div>
+      </div>
+      {% else %}
       <div class="cover-meta-item">
         <div class="cover-meta-label">Area</div>
         <div class="cover-meta-value">{{ area }} m²</div>
@@ -761,6 +767,7 @@ body {
         <div class="cover-meta-label">Zone</div>
         <div class="cover-meta-value">{{ zone }}</div>
       </div>
+      {% endif %}
       <div class="cover-meta-item">
         <div class="cover-meta-label">Total</div>
         <div class="cover-meta-value">{{ total | thb }} THB</div>
@@ -775,6 +782,7 @@ body {
         <div class="cover-client-label">Prepared for</div>
         <div class="cover-client-name">{{ client_name if client_name else "Your Project" }}</div>
       </div>
+      {% if color_name %}
       <div class="cover-color-block">
         <div class="cover-color-label">Selected Tone</div>
         <div class="cover-color-row">
@@ -782,6 +790,12 @@ body {
           <div class="cover-color-name">{{ color_name }}</div>
         </div>
       </div>
+      {% else %}
+      <div class="cover-color-block">
+        <div class="cover-color-label">Commission</div>
+        <div class="cover-color-name" style="margin-top:2mm">Made to order</div>
+      </div>
+      {% endif %}
     </div>
     <div class="cover-footer">
       <span>Prepared exclusively for your project</span>
@@ -808,6 +822,7 @@ body {
     <div class="concept-title">{{ product_title }}</div>
     <div class="concept-text">{{ product_description }}</div>
 
+    {% if color_name %}
     <div class="concept-divider"></div>
 
     <div class="concept-eyebrow">Selected Palette</div>
@@ -817,6 +832,7 @@ body {
         <div class="concept-swatch-name">{{ color_name }}</div>
       </div>
     </div>
+    {% endif %}
 
     <div class="concept-quote">
       <div class="concept-quote-text">"{{ design_intent }}"</div>
@@ -825,11 +841,12 @@ body {
 
   <div class="page-footer">
     <span>Pratta Thailand · prattathailand.com</span>
-    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+    <span>{{ product_title }}{% if not is_custom %} · {{ area }} m²{% endif %} · {{ date }}</span>
   </div>
 </section>
 
 
+{% if layers %}
 <!-- ═══════════════════════════════════
      PAGE 3 — SYSTEM
 ═══════════════════════════════════ -->
@@ -873,6 +890,7 @@ body {
     <span>{{ product_title }} · {{ area }} m²</span>
   </div>
 </section>
+{% endif %}
 
 
 {% if photo_uris and photo_uris|length > 0 %}
@@ -905,7 +923,7 @@ body {
 
   <div class="page-footer">
     <span>Pratta Thailand · prattathailand.com</span>
-    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+    <span>{{ product_title }}{% if not is_custom %} · {{ area }} m²{% endif %} · {{ date }}</span>
   </div>
 </section>
 {% endif %}
@@ -979,21 +997,30 @@ body {
         <div class="spec-totals-main-label">Total investment</div>
         <div class="spec-totals-main-value">{{ total | thb }} THB</div>
       </div>
+      {% if not is_custom %}
       <div class="spec-totals-row">
         <div class="spec-totals-label" style="font-size:7.5pt">All-inclusive price per m²</div>
         <div class="spec-totals-value" style="font-size:11pt">{{ price_per_sqm | thb }} THB/m²</div>
       </div>
+      {% endif %}
     </div>
 
+    {% if is_custom %}
+    <div class="spec-note">
+      {% if notes %}* {{ notes }}<br>{% endif %}
+      * VAT not included. Prices as individually agreed for this bespoke commission, valid 14 days.
+    </div>
+    {% else %}
     <div class="spec-note">
       * VAT not included. Surface preparation (levelling, filling) is quoted separately upon site inspection.<br>
       * Working area calculated with 10% material allowance. Prices based on SL retail price list, valid 14 days.
     </div>
+    {% endif %}
   </div>
 
   <div class="page-footer">
     <span>Pratta Thailand · prattathailand.com</span>
-    <span>{{ product_title }} · {{ area }} m² · {{ date }}</span>
+    <span>{{ product_title }}{% if not is_custom %} · {{ area }} m²{% endif %} · {{ date }}</span>
   </div>
 </section>
 
@@ -1014,6 +1041,36 @@ body {
     <div class="conditions-left">
       <div class="conditions-section-title">Process</div>
 
+      {% if is_custom %}
+      <div class="conditions-step">
+        <div class="conditions-step-num">01</div>
+        <div>
+          <div class="conditions-step-title">Order Confirmation</div>
+          <div class="conditions-step-desc">Scope, materials, colours and finishes of the bespoke pieces are confirmed in writing.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">02</div>
+        <div>
+          <div class="conditions-step-title">Advance Payment</div>
+          <div class="conditions-step-desc">100% advance payment secures the order and production slot.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">03</div>
+        <div>
+          <div class="conditions-step-title">Crafting</div>
+          <div class="conditions-step-desc">Each piece is hand-made by Pratta masters using authentic Italian materials.</div>
+        </div>
+      </div>
+      <div class="conditions-step">
+        <div class="conditions-step-num">04</div>
+        <div>
+          <div class="conditions-step-title">Handover</div>
+          <div class="conditions-step-desc">Pieces are inspected together upon delivery or collection; acceptance confirmed in writing.</div>
+        </div>
+      </div>
+      {% else %}
       <div class="conditions-step">
         <div class="conditions-step-num">01</div>
         <div>
@@ -1049,6 +1106,7 @@ body {
           <div class="conditions-step-desc">Final inspection and acceptance certificate signed by both parties. Defects addressed within 5 working days.</div>
         </div>
       </div>
+      {% endif %}
 
       <div class="conditions-validity">
         <div class="conditions-validity-text">This proposal is valid for 14 days from the date of issue.</div>
@@ -1059,11 +1117,18 @@ body {
       <div class="conditions-section-title">Payment</div>
 
       <div class="conditions-payment">
+        {% if is_custom %}
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Order</div><div class="conditions-payment-value">100% advance</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">VAT</div><div class="conditions-payment-value">Not included</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Delivery</div><div class="conditions-payment-value">{% if notes %}See notes{% else %}By agreement{% endif %}</div></div>
+        <div class="conditions-payment-item"><div class="conditions-payment-label">Quote validity</div><div class="conditions-payment-value">14 days</div></div>
+        {% else %}
         <div class="conditions-payment-item"><div class="conditions-payment-label">Materials</div><div class="conditions-payment-value">100% advance</div></div>
         <div class="conditions-payment-item"><div class="conditions-payment-label">Works</div><div class="conditions-payment-value">By agreement</div></div>
         <div class="conditions-payment-item"><div class="conditions-payment-label">VAT</div><div class="conditions-payment-value">Not included</div></div>
         <div class="conditions-payment-item"><div class="conditions-payment-label">Surface prep</div><div class="conditions-payment-value">Quoted separately</div></div>
         <div class="conditions-payment-item"><div class="conditions-payment-label">Quote validity</div><div class="conditions-payment-value">14 days</div></div>
+        {% endif %}
       </div>
 
       <div style="margin-top: 8mm;">

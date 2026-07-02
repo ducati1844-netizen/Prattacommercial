@@ -150,6 +150,32 @@ PRODUCTS = {
         ],
     },
 
+    # ── ПОЛЫ — МИКРОЦЕМЕНТ ────────────────────────────────────
+    "floor_mono_base": {
+        "display_name": "Marmorino Floor Mono Base",
+        "category": "floor",
+        "colorable": False,  # колеруется только финиш
+        "packs": [
+            {"label": "24 кг", "volume_l": 24, "yield_m2": 12, "price": 12300},
+        ],
+    },
+    "floor_mono_finish": {
+        "display_name": "Marmorino Floor Mono Finish",
+        "category": "floor",
+        "colorable": True,
+        "packs": [
+            {"label": "24 кг", "volume_l": 24, "yield_m2": 18, "price": 12300},
+        ],
+    },
+    "vetrificante_poliuretanico": {
+        "display_name": "Vetrificante Poliuretanico",
+        "category": "lacquer",
+        "colorable": False,
+        "packs": [
+            {"label": "5 л", "volume_l": 5, "yield_m2": 40, "price": 11900},
+        ],
+    },
+
     # ── ВЕНЕЦИАНСКИЕ ──────────────────────────────────────────
     "antico_veneziano": {
         "display_name": "Antico Veneziano",
@@ -252,6 +278,7 @@ PRODUCTS = {
         "category": "paint",
         "colorable": True,
         "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 24, "price": 3200},
             {"label": "15 л", "volume_l": 15, "yield_m2": 90, "price": 9600},
         ],
     },
@@ -260,6 +287,25 @@ PRODUCTS = {
         "category": "paint",
         "colorable": True,
         "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 24, "price": 3200},
+            {"label": "15 л", "volume_l": 15, "yield_m2": 90, "price": 9400},
+        ],
+    },
+    "mister_quartz_pt": {
+        "display_name": "Mister Quartz P/T",
+        "category": "paint",
+        "colorable": True,
+        "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 24, "price": 3200},
+            {"label": "15 л", "volume_l": 15, "yield_m2": 90, "price": 9600},
+        ],
+    },
+    "mister_quartz_da": {
+        "display_name": "Mister Quartz D/A",
+        "category": "paint",
+        "colorable": True,
+        "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 24, "price": 3200},
             {"label": "15 л", "volume_l": 15, "yield_m2": 90, "price": 9400},
         ],
     },
@@ -268,7 +314,17 @@ PRODUCTS = {
         "category": "paint",
         "colorable": True,
         "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 28,  "price": 2330},
             {"label": "15 л", "volume_l": 15, "yield_m2": 105, "price": 7600},
+        ],
+    },
+    "int_est_da": {
+        "display_name": "INT&EST D/A",
+        "category": "paint",
+        "colorable": True,
+        "packs": [
+            {"label": "4 л",  "volume_l": 4,  "yield_m2": 28,  "price": 2270},
+            {"label": "15 л", "volume_l": 15, "yield_m2": 105, "price": 7400},
         ],
     },
     "theia_eggshell_pt": {
@@ -456,8 +512,8 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "lime",
         "medical_certified": True,
-        "default_finish": "velatura",
-        "available_finishes": ["velatura", "specchio_cera", "metalline_gold", "metalline_silver"],
+        "default_finish": "specchio_cera",
+        "available_finishes": ["specchio_cera", "velatura", "metalline_gold", "metalline_silver"],
         "layers": [
             {
                 "category": "Preparation",
@@ -474,8 +530,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
-                "description": "Decorative veil seals the marble surface and softens its tonal depth.",
+                "products": [{"id": "specchio_cera", "multiplier": 1, "is_finish": True}],
+                "description": "Mirror wax — locks the polished marble surface and brings out its luminous depth.",
             },
         ],
     },
@@ -547,16 +603,16 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "metalline_gold",
-        "available_finishes": ["metalline_gold", "metalline_silver", "velatura"],
+        "default_finish": "velatura",
+        "available_finishes": ["velatura", "metalline_gold", "metalline_silver"],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Acrylic primer and bonding layer.",
+                "description": "Mineral primer and Ruvido textured base — depth and adhesion for natural stone relief.",
             },
             {
                 "category": "Decorative Base",
@@ -565,8 +621,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "metalline_gold", "multiplier": 1, "is_finish": True}],
-                "description": "Metallic glaze highlights the stone relief.",
+                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
+                "description": "Decorative veil seals the stone surface and deepens its tonal patina.",
             },
         ],
     },
@@ -577,16 +633,16 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "metalline_silver",
-        "available_finishes": ["metalline_silver", "metalline_gold", "velatura"],
+        "default_finish": "velatura",
+        "available_finishes": ["velatura", "metalline_silver", "metalline_gold"],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "fondo_a_calce", "multiplier": 1},
                 ],
-                "description": "Acrylic primer and bonding layer.",
+                "description": "Mineral primer and lime adhesion base for the urban concrete surface.",
             },
             {
                 "category": "Decorative Base",
@@ -595,8 +651,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "metalline_silver", "multiplier": 1, "is_finish": True}],
-                "description": "Metallic accent finish.",
+                "products": [{"id": "velatura", "multiplier": 1, "is_finish": True}],
+                "description": "Decorative veil seals the surface and softens the concrete tone.",
             },
         ],
     },
@@ -607,16 +663,16 @@ SYSTEMS = {
         "rate_thb_m2": 1300,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "metalline_gold",
-        "available_finishes": ["metalline_gold", "metalline_silver", "velatura"],
+        "default_finish": "specchio_cera",
+        "available_finishes": ["specchio_cera", "metalline_gold", "metalline_silver", "velatura"],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Acrylic primer and bonding layer.",
+                "description": "Mineral primer and Ruvido textured base — depth and adhesion for bark relief.",
             },
             {
                 "category": "Decorative Base",
@@ -625,8 +681,8 @@ SYSTEMS = {
             },
             {
                 "category": "Finish",
-                "products": [{"id": "metalline_gold", "multiplier": 1, "is_finish": True}],
-                "description": "Metallic glaze brings out the relief.",
+                "products": [{"id": "specchio_cera", "multiplier": 1, "is_finish": True}],
+                "description": "Mirror wax — locks the bark relief and brings out luminous depth.",
             },
         ],
     },
@@ -663,26 +719,21 @@ SYSTEMS = {
         "rate_thb_m2": 650,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "umbrella_silk",
-        "available_finishes": ["umbrella_silk"],
+        "default_finish": None,
+        "available_finishes": [],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Primer and smooth bonding layer.",
+                "description": "Mineral primer and Ruvido textured base for depth and adhesion.",
             },
             {
                 "category": "Decorative Base",
                 "products": [{"id": "sirocco", "multiplier": 1}],
                 "description": "Silky brush-applied finish with iridescent shimmer.",
-            },
-            {
-                "category": "Finish",
-                "products": [{"id": "umbrella_silk", "multiplier": 1, "is_finish": True}],
-                "description": "Protective silk veil.",
             },
         ],
     },
@@ -693,26 +744,21 @@ SYSTEMS = {
         "rate_thb_m2": 650,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "umbrella_silk",
-        "available_finishes": ["umbrella_silk"],
+        "default_finish": None,
+        "available_finishes": [],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Primer and smooth bonding layer.",
+                "description": "Mineral primer and Ruvido textured base for depth and adhesion.",
             },
             {
                 "category": "Decorative Base",
                 "products": [{"id": "phantom", "multiplier": 1}],
                 "description": "Silky brush finish with subtle silver reflection.",
-            },
-            {
-                "category": "Finish",
-                "products": [{"id": "umbrella_silk", "multiplier": 1, "is_finish": True}],
-                "description": "Protective silk veil.",
             },
         ],
     },
@@ -730,9 +776,9 @@ SYSTEMS = {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Primer and smooth bonding layer.",
+                "description": "Mineral primer and Ruvido textured base for depth and adhesion.",
             },
             {
                 "category": "Decorative Base",
@@ -760,9 +806,9 @@ SYSTEMS = {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Primer and smooth bonding layer.",
+                "description": "Mineral primer and Ruvido textured base for depth and adhesion.",
             },
             {
                 "category": "Decorative Base",
@@ -813,38 +859,33 @@ SYSTEMS = {
         "rate_thb_m2": 650,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "umbrella_silk",
-        "available_finishes": ["umbrella_silk"],
+        "default_finish": None,
+        "available_finishes": [],
         "layers": [
             {
                 "category": "Preparation",
                 "products": [
                     {"id": "primer_normal", "multiplier": 1},
-                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                    {"id": "ruvido_pt", "multiplier": 1, "by_tone": "ruvido"},
                 ],
-                "description": "Primer and smooth bonding layer.",
+                "description": "Mineral primer and Ruvido textured base for depth and adhesion.",
             },
             {
                 "category": "Decorative Base",
                 "products": [{"id": "shabby", "multiplier": 1}],
                 "description": "Vintage shabby-look brush finish with antiqued character.",
             },
-            {
-                "category": "Finish",
-                "products": [{"id": "umbrella_silk", "multiplier": 1, "is_finish": True}],
-                "description": "Protective silk veil.",
-            },
         ],
     },
     "fantasia": {
         "display_name": "Fantasia",
-        "subtitle": "Brush Glitter Collection",
-        "tool": "brush",
-        "rate_thb_m2": 650,
+        "subtitle": "Sponge Glitter Collection",
+        "tool": "sponge",
+        "rate_thb_m2": 750,
         "chemistry": "acrylic",
         "medical_certified": False,
-        "default_finish": "umbrella_silk",
-        "available_finishes": ["umbrella_silk"],
+        "default_finish": None,
+        "available_finishes": [],
         "layers": [
             {
                 "category": "Preparation",
@@ -856,13 +897,118 @@ SYSTEMS = {
             },
             {
                 "category": "Decorative Base",
-                "products": [{"id": "fantasia", "multiplier": 1}],
-                "description": "Sparkling brush finish with fine glitter shimmer.",
+                "products": [{"id": "fantasia", "multiplier": 2}],
+                "description": "Sparkling sponge-applied finish — two layers for full glitter shimmer.",
+            },
+        ],
+    },
+    # ── ПОЛЫ — МИКРОЦЕМЕНТ ───────────────────────────────────
+    "marmorino_floor_mono": {
+        "display_name": "Marmorino Floor Mono",
+        "subtitle": "Microcement Floor System",
+        "tool": "trowel",
+        "rate_thb_m2": 1900,
+        "chemistry": "lime",
+        "medical_certified": False,
+        "default_finish": None,
+        "available_finishes": [],
+        "layers": [
+            {
+                "category": "Preparation",
+                "products": [{"id": "primer_normal", "multiplier": 1}],
+                "description": "Mineral primer for adhesion to the substrate.",
+            },
+            {
+                "category": "Decorative Base",
+                "products": [{"id": "floor_mono_base", "multiplier": 2}],  # 2 layers × 12 m²/pack
+                "description": "Microcement base applied in two trowelled layers — the structural body of the floor.",
             },
             {
                 "category": "Finish",
-                "products": [{"id": "umbrella_silk", "multiplier": 1, "is_finish": True}],
-                "description": "Protective silk veil.",
+                "products": [{"id": "floor_mono_finish", "multiplier": 1}],  # yield 18 m² already includes 2 layers
+                "description": "Coloured microcement finish in two passes — defines the final tone and surface character.",
+            },
+            {
+                "category": "Protection",
+                "products": [{"id": "vetrificante_poliuretanico", "multiplier": 3}],  # 3 layers
+                "description": "Polyurethane vitrifier applied in three coats — high-traffic protection and final seal.",
+            },
+        ],
+    },
+
+    # ── МЕТАЛЛАЙН КАК САМОСТОЯТЕЛЬНАЯ СИСТЕМА ────────────────
+    "metalline_gold_system": {
+        "display_name": "Metalline Gold",
+        "subtitle": "Metallic Sponge Collection",
+        "tool": "sponge",
+        "rate_thb_m2": 750,
+        "chemistry": "acrylic",
+        "medical_certified": False,
+        "default_finish": None,
+        "available_finishes": [],
+        "layers": [
+            {
+                "category": "Preparation",
+                "products": [
+                    {"id": "primer_normal", "multiplier": 1},
+                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                ],
+                "description": "Mineral primer and smooth bonding layer.",
+            },
+            {
+                "category": "Decorative Base",
+                "products": [{"id": "metalline_gold", "multiplier": 2}],
+                "description": "Sponge-applied metallic gold coating — two layers for full luminous depth.",
+            },
+        ],
+    },
+    "metalline_silver_system": {
+        "display_name": "Metalline Silver",
+        "subtitle": "Metallic Sponge Collection",
+        "tool": "sponge",
+        "rate_thb_m2": 750,
+        "chemistry": "acrylic",
+        "medical_certified": False,
+        "default_finish": None,
+        "available_finishes": [],
+        "layers": [
+            {
+                "category": "Preparation",
+                "products": [
+                    {"id": "primer_normal", "multiplier": 1},
+                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                ],
+                "description": "Mineral primer and smooth bonding layer.",
+            },
+            {
+                "category": "Decorative Base",
+                "products": [{"id": "metalline_silver", "multiplier": 2}],
+                "description": "Sponge-applied metallic silver coating — two layers for full luminous depth.",
+            },
+        ],
+    },
+    "metalline_bronze_system": {
+        "display_name": "Metalline Bronze",
+        "subtitle": "Metallic Sponge Collection",
+        "tool": "sponge",
+        "rate_thb_m2": 750,
+        "chemistry": "acrylic",
+        "medical_certified": False,
+        "default_finish": None,
+        "available_finishes": [],
+        "layers": [
+            {
+                "category": "Preparation",
+                "products": [
+                    {"id": "primer_normal", "multiplier": 1},
+                    {"id": "primer_liscio_pt", "multiplier": 1, "by_tone": "primer_liscio"},
+                ],
+                "description": "Mineral primer and smooth bonding layer.",
+            },
+            {
+                "category": "Decorative Base",
+                "products": [{"id": "metalline_bronze", "multiplier": 2}],
+                "description": "Sponge-applied metallic bronze coating — two layers for full luminous depth.",
             },
         ],
     },
@@ -885,8 +1031,31 @@ SYSTEMS = {
             },
             {
                 "category": "Coating",
-                "products": [{"id": "plastogum_pt", "multiplier": 2, "by_tone": "plastogum"}],  # ×2 layers
+                "products": [{"id": "plastogum_pt", "multiplier": 1, "by_tone": "plastogum"}],  # yield 90 м² already covers 2 coats
                 "description": "Elastomeric paint applied in two coats — waterproof and breathable.",
+            },
+        ],
+    },
+    "mister_quartz": {
+        "display_name": "Mister Quartz",
+        "subtitle": "Quartz Lotus-Effect Coating",
+        "tool": "airless",
+        "rate_thb_m2": 500,
+        "chemistry": "acrylic",
+        "medical_certified": True,
+        "default_finish": None,
+        "available_finishes": [],
+        "min_area_m2_for_works": 300,
+        "layers": [
+            {
+                "category": "Preparation",
+                "products": [{"id": "primer_normal", "multiplier": 1}],
+                "description": "Mineral primer for adhesion.",
+            },
+            {
+                "category": "Coating",
+                "products": [{"id": "mister_quartz_pt", "multiplier": 1, "by_tone": "mister_quartz"}],  # yield 90 м² already covers 2 coats
+                "description": "Quartz coating with lotus effect — self-cleaning, suitable for wet zones, facades and interiors.",
             },
         ],
     },
@@ -908,7 +1077,7 @@ SYSTEMS = {
             },
             {
                 "category": "Coating",
-                "products": [{"id": "int_est_pt", "multiplier": 2}],  # ×2 layers
+                "products": [{"id": "int_est_pt", "multiplier": 1, "by_tone": "int_est"}],  # yield 105 м² already covers 2 coats
                 "description": "Two coats of acrylic paint.",
             },
         ],
@@ -931,7 +1100,7 @@ SYSTEMS = {
             },
             {
                 "category": "Coating",
-                "products": [{"id": "theia_eggshell_pt", "multiplier": 2}],
+                "products": [{"id": "theia_eggshell_pt", "multiplier": 1}],  # yield 105 м² already covers 2 coats
                 "description": "Two coats of medical-grade eggshell paint.",
             },
         ],
@@ -956,43 +1125,68 @@ SYSTEM_ALIASES = {
     "travertino imperium": "travertino_imperium",
     "travertin": "travertino_imperium",
     "imperium": "travertino_imperium",
+    "ทราเวอร์ทิโน": "travertino_imperium",
+    "ทราเวอติโน": "travertino_imperium",
+    "ทราเวอร์ทิโน อิมพีเรียม": "travertino_imperium",
     "velvet": "velvet",
     "вельвет": "velvet",
+    "เวลเวท": "velvet",
+    "เวลเว็ท": "velvet",
     "manu": "manu",
     "ману": "manu",
+    "มานู": "manu",
     "intonachino": "intonachino",
     "интонакино": "intonachino",
     "intonachino fine": "intonachino",
     "intonachino medium": "intonachino",
     "intonachino coarse": "intonachino",
+    "อินโทนาคิโน": "intonachino",
     "marmorino": "marmorino_carrara",
     "marmorino carrara": "marmorino_carrara",
     "carrara": "marmorino_carrara",
+    "มาร์โมริโน": "marmorino_carrara",
+    "คาร์รารา": "marmorino_carrara",
+    "มาร์โมริโน คาร์รารา": "marmorino_carrara",
     "antico veneziano": "antico_veneziano",
     "veneziano": "antico_veneziano",
     "венецианка": "antico_veneziano",
+    "อันติโก เวเนเซียโน": "antico_veneziano",
+    "เวเนเซียโน": "antico_veneziano",
+    "เวเนเชียน": "antico_veneziano",
     "seta stucco": "seta_stucco",
     "сета стукко": "seta_stucco",
+    "เซต้า สตูคโค": "seta_stucco",
     "roccia": "roccia",
     "роччиа": "roccia",
+    "รอชเชีย": "roccia",
+    "หิน": "roccia",
     "loft": "loft",
     "лофт": "loft",
+    "ลอฟท์": "loft",
     "sequoia": "sequoia",
     "сиквойя": "sequoia",
+    "เซโคเอีย": "sequoia",
     "sirocco": "sirocco",
     "сирокко": "sirocco",
+    "ซิรอคโค": "sirocco",
     "phantom": "phantom",
     "фантом": "phantom",
+    "แฟนทอม": "phantom",
     "seta exclusive": "seta_exclusive",
     "seta": "seta_exclusive",
+    "เซต้า เอ็กซ์คลูซีฟ": "seta_exclusive",
     "antico velluto": "antico_velluto",
     "velluto": "antico_velluto",
+    "อันติโก เวลลูโต": "antico_velluto",
     "dolce seta": "dolce_seta",
     "dolce": "dolce_seta",
+    "ดอลเช่ เซต้า": "dolce_seta",
     "shabby": "shabby",
     "шебби": "shabby",
+    "แช็บบี้": "shabby",
     "fantasia": "fantasia",
     "фантазия": "fantasia",
+    "แฟนตาเซีย": "fantasia",
     "plastogum": "plastogum",
     "пластогум": "plastogum",
     "пластагум": "plastogum",
@@ -1007,14 +1201,68 @@ SYSTEM_ALIASES = {
     "krask": "plastogum",        # «краска» по умолчанию = Plastogum (наш hero)
     "краска": "plastogum",
     "paint": "plastogum",
+    "marmorino floor mono": "marmorino_floor_mono",
+    "floor mono": "marmorino_floor_mono",
+    "marmorino floor": "marmorino_floor_mono",
+    "microcement": "marmorino_floor_mono",
+    "микроцемент": "marmorino_floor_mono",
+    "мармарино флор моно": "marmorino_floor_mono",
+    "флор моно": "marmorino_floor_mono",
+    "пол": "marmorino_floor_mono",
+    "floor": "marmorino_floor_mono",
+    "ไมโครซีเมนต์": "marmorino_floor_mono",
+    "พื้นไมโครซีเมนต์": "marmorino_floor_mono",
+    "ฟลอร์ โมโน": "marmorino_floor_mono",
+    "พื้น": "marmorino_floor_mono",
+    "metalline gold": "metalline_gold_system",
+    "metalline silver": "metalline_silver_system",
+    "metalline bronze": "metalline_bronze_system",
+    "metaline gold": "metalline_gold_system",
+    "metaline silver": "metalline_silver_system",
+    "metaline bronze": "metalline_bronze_system",
+    "металлайн золото": "metalline_gold_system",
+    "металлайн серебро": "metalline_silver_system",
+    "металлайн бронза": "metalline_bronze_system",
+    "металлайн голд": "metalline_gold_system",
+    "металлайн силвер": "metalline_silver_system",
+    "металлайн бронз": "metalline_bronze_system",
+    "metalline": "metalline_gold_system",
+    "металлайн": "metalline_gold_system",
+    "เมทัลไลน์ โกลด์": "metalline_gold_system",
+    "เมทัลไลน์ ซิลเวอร์": "metalline_silver_system",
+    "เมทัลไลน์ บรอนซ์": "metalline_bronze_system",
+    "เมทัลไลน์": "metalline_gold_system",
+    "mister quartz": "mister_quartz",
+    "mr quartz": "mister_quartz",
+    "mr. quartz": "mister_quartz",
+    "quartz": "mister_quartz",
+    "мистер кварц": "mister_quartz",
+    "мр кварц": "mister_quartz",
+    "кварц": "mister_quartz",
+    "кварцевая": "mister_quartz",
+    "кварцевый": "mister_quartz",
+    "квартц": "mister_quartz",
+    "куартц": "mister_quartz",
+    "лотос": "mister_quartz",
+    "lotus": "mister_quartz",
+    "มิสเตอร์ ควอตซ์": "mister_quartz",
+    "ควอตซ์": "mister_quartz",
+    "โลตัส": "mister_quartz",
+    "เอฟเฟกต์ดอกบัว": "mister_quartz",
     "int est": "int_est",
     "int&est": "int_est",
     "int_est": "int_est",
     "интест": "int_est",
     "интэст": "int_est",
+    "อินท์ แอนด์ เอสท์": "int_est",
+    "อินเทสต์": "int_est",
     "theia": "theia",
     "тея": "theia",
     "тэя": "theia",
+    "เธีย": "theia",
+    "อีกเชลล์": "theia",
+    "สี": "plastogum",
+    "พลาสโตกัม": "plastogum",
 }
 
 

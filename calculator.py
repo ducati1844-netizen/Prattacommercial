@@ -18,6 +18,9 @@ from catalog import (
 )
 
 WORKING_AREA_FACTOR = 1.10
+# Краски считаем без 10% запаса: расход рассчитан точно (выход банки уже за 2 слоя),
+# и Свят явно требует «90 м² → 1 банка», без буферного округления вверх.
+PAINT_SYSTEM_IDS = {"plastogum", "mister_quartz", "int_est", "theia"}
 
 
 def _variant_by_tone(family: str, color_type: str) -> str:
@@ -140,7 +143,8 @@ def compute_kp(intent: dict) -> dict:
     area = float(intent.get("area") or 0)
     if area <= 0:
         raise ValueError("Area must be positive")
-    working_area = area * WORKING_AREA_FACTOR
+    area_factor = 1.0 if system_id in PAINT_SYSTEM_IDS else WORKING_AREA_FACTOR
+    working_area = area * area_factor
 
     color_type = (intent.get("color_type") or "light").lower()
     finish_override = intent.get("finish")
@@ -268,6 +272,76 @@ def compute_kp(intent: dict) -> dict:
         "benefits": benefits,
         "date": datetime.now().strftime("%d.%m.%Y"),
         # photos — добавляются в bot.py отдельно
+        "photos": intent.get("photos", []),
+    }
+
+
+def compute_custom_kp(intent: dict) -> dict:
+    """
+    Расчёт нестандартного КП (изделия, большие образцы, произвольные позиции).
+    Цены приходят только от пользователя — никаких прайсов и запасов.
+    """
+    items_in = intent.get("items") or []
+    if not items_in:
+        raise ValueError("No items found — please list what to quote and the prices")
+
+    missing = [it.get("name") or "?" for it in items_in if not it.get("unit_price")]
+    if missing:
+        raise ValueError("Price not specified for: " + ", ".join(missing))
+
+    rows = []
+    items_count = 0
+    for it in items_in:
+        qty = float(it.get("quantity") or 1)
+        unit_price = float(it["unit_price"])
+        line_total = int(round(qty * unit_price))
+        rows.append({
+            "name": it.get("name") or "Item",
+            "package": it.get("unit") or "pcs",
+            "quantity": int(qty) if qty == int(qty) else qty,
+            "unit_price": int(round(unit_price)),
+            "total": line_total,
+        })
+        items_count += qty
+
+    materials_total = sum(r["total"] for r in rows)
+    title = intent.get("title") or "Bespoke Proposal"
+
+    return {
+        "is_custom": True,
+        "system_id": None,
+        "client_name": intent.get("client_name"),
+        "product_title": title,
+        "product_subtitle": "Bespoke Commission",
+        "product_description": intent.get(
+            "product_description",
+            f"{title} — crafted individually by Pratta Thailand masters "
+            "with authentic Italian materials, made to order for your project.",
+        ),
+        "design_intent": intent.get("design_intent", "Made by hand, made to order."),
+        "area": None,
+        "working_area": None,
+        "zone": None,
+        "color_type": None,
+        "color_name": None,
+        "color_hex": None,
+        "application_included": False,
+        "application_rate": 0,
+        "layers": [],
+        "materials": [{"group": "Bespoke Items", "items": rows}],
+        "materials_total": int(materials_total),
+        "colorant_total": 0,
+        "works_total": 0,
+        "total": int(materials_total),
+        "price_per_sqm": 0,
+        "items_count": int(items_count) if items_count == int(items_count) else items_count,
+        "notes": intent.get("notes"),
+        "benefits": [
+            "Handcrafted by Pratta masters",
+            "Authentic Italian raw materials",
+            "Made to order",
+        ],
+        "date": datetime.now().strftime("%d.%m.%Y"),
         "photos": intent.get("photos", []),
     }
 
